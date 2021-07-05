@@ -1,8 +1,8 @@
 import csv
 
 
-with open("comments_append.csv","r",encoding="utf-8") as inf:
-    with open("comments_append_new.csv","w",encoding="utf-8") as f:
+with open("comments_append.csv", "r", encoding="utf-8") as inf:
+    with open("comments_append_new.csv", "w", encoding="utf-8") as f:
         reader = csv.reader(inf,dialect="excel")
         writer = csv.writer(f,dialect="excel")
         for i in reader:

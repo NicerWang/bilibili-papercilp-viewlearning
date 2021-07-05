@@ -3,7 +3,7 @@ import json
 import csv
 
 
-def getComments(BV:str, Jquery:str):
+def getComments(Jquery:str):
     headers = {
         'accept': "*/*",
         'accept-encoding': 'utf-8',
@@ -23,13 +23,13 @@ def getComments(BV:str, Jquery:str):
         headers=headers)
     print(t.encoding)
     print(t.apparent_encoding)
-    with open('TestJson.json', 'w', encoding='utf-8') as fw:
+    with open('archive/TestJson.json', 'w', encoding='utf-8') as fw:
         idx = t.text.find("{")
         fw.write(t.text[idx:-1])
 
 
-def writeCSV():
-    with open("TestJson.json", "r", encoding="utf-8") as f:
+def writeCSV(date:str):
+    with open("archive/TestJson.json", "r", encoding="utf-8") as f:
         data = json.loads(f.read())
     comments = data['data']['replies']
     text = []
@@ -38,22 +38,28 @@ def writeCSV():
         if i['replies'] is not None:
             for j in i['replies']:
                 text.append(j['content']['message'])
-    with open("comments_append.csv", "a", encoding="utf-8") as f:
+    with open("comments_predict.csv", "a", encoding="utf-8") as f:
         csvwriter = csv.writer(f, dialect="excel")
         for singe in text:
+            if singe[0].find("https://") != -1:
+                continue
+            if singe[0].find("BV") != -1:
+                continue
+            if singe[0].find("http://") != -1:
+                continue
             idx = 0
             if singe.startswith("回复"):
                 idx = singe.find(':') + 1
             singe = singe.replace("\n", "")[idx:]
             if len(singe) >= 5:
-                csvwriter.writerow([singe])
+                csvwriter.writerow([date,singe])
 
 if __name__ == "__main__":
     while True:
-        bv = " "
-        jq = input("JQuery:")
-        getComments(bv,jq)
-        writeCSV()
+        jq = input("Input Video JQuery:")
+        time = input("Input Video Time:")
+        getComments(jq)
+        writeCSV(time)
 
 
 
