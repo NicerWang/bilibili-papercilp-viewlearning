@@ -6,6 +6,7 @@ from scipy.stats import norm
 import math
 import matplotlib.pyplot as plt
 
+# 所有需要的全局模型变量
 stopwords = []
 comments = []
 test_set = []
