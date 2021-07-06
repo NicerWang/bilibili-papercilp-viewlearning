@@ -23,13 +23,13 @@ def getComments(Jquery:str):
         headers=headers)
     print(t.encoding)
     print(t.apparent_encoding)
-    with open('archive/TestJson.json', 'w', encoding='utf-8') as fw:
+    with open('archive/spider.json', 'w', encoding='utf-8') as fw:
         idx = t.text.find("{")
         fw.write(t.text[idx:-1])
 
 
 def writeCSV(date:str):
-    with open("archive/TestJson.json", "r", encoding="utf-8") as f:
+    with open("archive/spider.json", "r", encoding="utf-8") as f:
         data = json.loads(f.read())
     comments = data['data']['replies']
     text = []
@@ -38,7 +38,7 @@ def writeCSV(date:str):
         if i['replies'] is not None:
             for j in i['replies']:
                 text.append(j['content']['message'])
-    with open("comments_predict.csv", "a", encoding="utf-8") as f:
+    with open("archive/comments_append.csv", "a", encoding="utf-8") as f:
         csvwriter = csv.writer(f, dialect="excel")
         for singe in text:
             if singe[0].find("https://") != -1:

@@ -42,7 +42,7 @@ def initialize():
             else:
                 stopwords.append(line.strip("\n"))
     # 导入评论内容
-    in_file = open("comments.csv", "r", encoding="utf-8")
+    in_file = open("trainset.csv", "r", encoding="utf-8")
     csv_reader = csv.reader(in_file, dialect="excel")
     for comment in csv_reader:
         if len(comment) == 0:
@@ -186,6 +186,7 @@ def predict():
 
 if __name__ == "__main__":
     initialize()
+    # 训练集上的平均正确率测试
     # rate = 0
     # n = 500
     # for i in range(n):
@@ -193,6 +194,7 @@ if __name__ == "__main__":
     # print(str(n) + "次测试平均正确率为：")
     # print(rate / n)
 
+    # 训练与模型预测
     train()
     pos,neg = predict()
     time = []
