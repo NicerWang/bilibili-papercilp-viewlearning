@@ -42,7 +42,7 @@ def initialize():
             else:
                 stopwords.append(line.strip("\n"))
     # 导入评论内容
-    in_file = open("trainset.csv", "r", encoding="utf-8")
+    in_file = open("training_set.csv", "r", encoding="utf-8")
     csv_reader = csv.reader(in_file, dialect="excel")
     for comment in csv_reader:
         if len(comment) == 0:
@@ -109,6 +109,7 @@ def train(test_mode: bool = False):
     if test_mode:
         return test(test_set)
 
+
 def bayes(content, length):
     test_pos = test_neg = 0
     theta_pos = norm.cdf(length + 2, pos_len_mean, pos_len_std) - norm.cdf(length - 2, pos_len_mean, pos_len_std)
@@ -136,11 +137,12 @@ def bayes(content, length):
         isPostive = False
     return isPostive
 
+
 def test(test_set):
     error_cnt = 0
     test_cnt = 0
     for comment in test_set:
-        isPositive = bayes(comment[0],comment[2])
+        isPositive = bayes(comment[0], comment[2])
         if isPositive is None:
             continue
         test_cnt = test_cnt + 1
@@ -152,6 +154,7 @@ def test(test_set):
                 error_cnt = error_cnt + 1
     return 1 - error_cnt / test_cnt
 
+
 def judge(new_comment):
     keys = []
     l = len(new_comment)
@@ -161,7 +164,6 @@ def judge(new_comment):
         keys.append(j)
     isPostive = bayes(keys, l)
     return isPostive
-
 
 
 def predict():
@@ -181,7 +183,7 @@ def predict():
             predict_dict_pos[new_comment[0]] = predict_dict_pos[new_comment[0]] + 1
         else:
             predict_dict_neg[new_comment[0]] = predict_dict_neg[new_comment[0]] + 1
-    return predict_dict_pos,predict_dict_neg
+    return predict_dict_pos, predict_dict_neg
 
 
 if __name__ == "__main__":
@@ -196,7 +198,7 @@ if __name__ == "__main__":
 
     # 训练与模型预测
     train()
-    pos,neg = predict()
+    pos, neg = predict()
     time = []
     result = []
     for i in pos.keys():
@@ -207,10 +209,9 @@ if __name__ == "__main__":
         print(ni / (pi + ni))
         time.append(i[3:])
         result.append(pi)
-    plt.plot(time,result,color="red",marker="o")
+    plt.plot(time, result, color="red", marker="o")
     plt.title("Changing Views towards Paperclip by Bayes")
     plt.xlabel("time(y-m-d)")
     plt.ylabel("Percentage of Attacking(%)")
-    plt.ylim(0,100)
+    plt.ylim(0, 100)
     plt.show()
-
